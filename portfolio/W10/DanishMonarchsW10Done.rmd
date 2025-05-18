@@ -1,0 +1,205 @@
+---
+title: "Danish Kings, W10 assignment"
+author: "Christian Reinholdt"
+date: "16.5.2025"
+output:
+  html_document: default
+  pdf_document: default
+---
+## Setup 
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE, message = TRUE, warning = FALSE)
+```
+
+- Installing some packages first (change eval=TRUE, if packages are needed)
+```{r packages, eval=FALSE}
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+install.packages("tidyverse")
+install.packages("tidyverse")
+install.packages("dplyr")
+install.packages("readr")
+install.packages("ggplot2")
+```
+
+- When packages are already installed:
+```{r library, echo=FALSE}
+library ("tidyverse")
+library ("dplyr")
+library ("readr")
+library ("ggplot2")
+```
+
+The task here is to load your Danish Monarchs csv into R using the `tidyverse` toolkit, calculate and explore the kings' duration of reign with pipes `%>%` in `dplyr` and plot it over time.
+
+## Load the kings
+
+Make sure to first create an  `.Rproj` workspace with a `data/` folder where you place either your own dataset or the provided `kings.csv` dataset. 
+
+1. Look at the dataset that are you loading and check what its columns are separated by? (hint: open it in plain text editor to see)
+
+List what is the separator: 
+- commas (since it is a comma separated values file (csv-file))  
+
+2. Create a `kings` object in R with the different functions below and inspect the different outputs.
+`read.csv()`
+`read_csv()`
+`read.csv2()` 
+`read_csv2()`
+
+```{r eval1}
+# FILL IN THE CODE BELOW and review the outputs
+
+kings1 <- read.csv("data/kings data.csv")
+
+kings2 <- read_csv("data/kings data.csv")
+
+kings3 <- read.csv2("data/kings data.csv")
+
+kings4 <- read_csv2( "data/kings data.csv")
+```
+Answer: 
+1. Which of these functions is a `tidyverse` function? Read data with it below into a `kings` object
+- "_" and "." is a tidyverse function. 
+```{r readcsv1}
+kings <- read_csv("data/kings data.csv")
+
+```
+
+2. What is the result of running `class()` on the `kings` object created with a tidyverse function.
+```{r classtest}
+class(kings)
+```
+- We see that "class()" informs us that the "kings" object is a tabular data.frame.
+
+
+3. How many columns does the object have when created with these different functions?
+- It differs, when using a proper tidyverse function to load the csv, the object has 11 columns. But when loading the csv improperly, it only has 1 column.
+
+4. Show the dataset so that we can see how R interprets each column
+```{r inspection of columns}
+glimpse(kings)
+
+```
+We see that R interprets each column as "characters", that is, as letters, and not for instance as numbers or years.
+
+## Calculate the duration of reign for all the kings in your table
+You can calculate the duration of reign in years with `mutate` function by subtracting the equivalents of your `startReign` from `endReign` columns and writing the result to a new column called `duration`. But first you need to check a few things:
+
+Is your data messy? Fix it before re-importing to R
+
+- Data is not messy, since it is Adelas :-) I will however change how Rstudio interprets these columns, to be numeric.
+
+```{r changing interpretation of columns}
+kings <- kings %>%
+  mutate(
+    Name = as.character(Name),
+    House = as.character(House),
+    Start_year = as.numeric(Start_year),
+    End_year = as.numeric(End_year),
+    Birth_year = as.numeric(Birth_year),
+    Death_year = as.numeric(Death_year),
+    Gender = as.character(Gender),       
+    Dynasty = as.character(Dynasty),
+    Source = as.character(Source),
+    BirthDMY = as.character(BirthDMY),   
+    DeathDMY = as.character(DeathDMY)
+  ) %>%
+  filter(
+    !is.na(Start_year),
+    !is.na(End_year)
+  )
+```
+
+
+```{r making duration column}
+kings_cleaned <- kings %>%
+  mutate(duration = End_year - Start_year) 
+```
+
+
+## Calculate the average duration of reign for all rulers
+Do you remember how to calculate an average on a vector object? If not, review the last two lessons and remember that a column is basically a vector. So you need to subset your `kings` dataset to the `duration` column. If you subset it as a vector you can calculate average on it with `mean()` base-R function. If you subset it as a tibble, you can calculate average on it with `summarize()` tidyverse function. Try both ways!
+
+You first need to know how to select the relevant `duration` column. What are your options?
+Is your selected `duration` column a tibble or a vector? The `mean()` function can only be run on a vector. The `summarize()` function works on a tibble.
+Are you getting an error that there are characters in your column? Coerce your data to numbers with `as.numeric()`.
+Remember to handle NAs: `mean(X, na.rm=TRUE)`
+
+
+```{r mean calculation}
+
+library(dplyr)
+
+mean_duration <- kings_cleaned %>%
+  mutate(avg_duration = mean(duration, na.rm = TRUE))
+
+mean_duration
+
+```
+
+## How many and which kings enjoyed a longer-than-average duration of reign?
+
+You have calculated the average duration above. Use it now to `filter()` the `duration` column in  `kings` dataset. Display the result and also  count the resulting rows with `count()`
+
+```{r kings with long reigns}
+
+long_reign_kings <- kings_cleaned %>%
+  filter(duration > 19.577)
+
+print(long_reign_kings)
+
+long_reign_kings %>%
+  count()
+view(long_reign_kings)
+```
+
+We see here a list of 25 kings (and queens) who had longer than average duration of reign.
+
+## How many days did the three longest-ruling monarchs rule? 
+
+Sort kings by reign `duration` in the descending order. Select the three longest-ruling monarchs with the `slice()` function
+Use `mutate()` to create `Days` column where you calculate the total number of days they ruled
+BONUS: consider the transition year (with 366 days) in your calculation!
+
+```{r top three}
+kings_cleaned %>%
+  arrange(desc(duration)) %>%    
+  slice(1:3) %>%                 
+  mutate(
+    Days = duration * 365.25,
+    Days = Days
+  ) %>%
+  select(Name, duration, Days)   
+
+```
+
+
+## Challenge: Plot the kings' duration of reign through time
+
+What is the long-term trend in the duration of reign among Danish monarchs? How does it relate to the historical violence trends ? 
+
+Try to plot the duration of reign column in `ggplot` with `geom_point()` and  `geom_smooth()`
+In order to peg the duration (which is between 1-99) somewhere to the x axis with individual centuries, I recommend creating a new column `midyear` by adding to `startYear` the product of `endYear` minus the `startYear` divided by two (`startYear + (endYear-startYear)/2`).
+Now you can plot the kings dataset, plotting `midyear` along the x axis and `duration` along y axis
+BONUS: add a title, nice axis labels to the plot and make the theme B&W and font bigger to make it nice and legible!
+
+```{r ggplot of average duration}
+
+kings_cleaned <- kings_cleaned %>%
+  mutate(midyear = Start_year + (End_year - Start_year) / 2)
+
+ggplot(kings_cleaned, aes(x = midyear, y = duration)) +
+  geom_point(color = "steelblue", size = 2, alpha = 0.7) +    
+  geom_smooth(method = "loess", se = TRUE, color = "darkred") + 
+  labs(
+    title = "Trend in Duration of Reign of Danish Monarchs Over Time",
+    x = "Reign Midyear",
+    y = "Duration of Reign (Years)"
+  ) +
+  theme_bw(base_size = 14)       
+
+
+```
+
+The long term trend in the duration of Danish Monarchs is that they rule for longer. The average increases from something like 10 years to something like 30 years in the entire period. This goes well with general violence trends in history, which very often see violence decrease over time.

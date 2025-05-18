@@ -1,0 +1,622 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Danish Kings, W10 assignment},
+  pdfauthor={Christian Reinholdt},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Danish Kings, W10 assignment}
+\author{Christian Reinholdt}
+\date{16.5.2025}
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knitr}\SpecialCharTok{::}\NormalTok{opts\_chunk}\SpecialCharTok{$}\FunctionTok{set}\NormalTok{(}\AttributeTok{echo =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Installing some packages first (change eval=TRUE, if
+packages are
+needed)}\label{installing-some-packages-first-change-evaltrue-if-packages-are-needed}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{options}\NormalTok{(}\AttributeTok{repos =} \FunctionTok{c}\NormalTok{(}\AttributeTok{CRAN =} \StringTok{"https://cloud.r{-}project.org"}\NormalTok{))}
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{)}
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{)}
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"dplyr"}\NormalTok{)}
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"readr"}\NormalTok{)}
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"ggplot2"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{When packages are already
+installed:}\label{when-packages-are-already-installed}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{ (}\StringTok{"tidyverse"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching core tidyverse packages ------------------------ tidyverse 2.0.0 --
+## v dplyr     1.1.4     v readr     2.1.5
+## v forcats   1.0.0     v stringr   1.5.1
+## v ggplot2   3.5.2     v tibble    3.2.1
+## v lubridate 1.9.4     v tidyr     1.3.1
+## v purrr     1.0.4     
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## i Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{ (}\StringTok{"dplyr"}\NormalTok{)}
+\FunctionTok{library}\NormalTok{ (}\StringTok{"readr"}\NormalTok{)}
+\FunctionTok{library}\NormalTok{ (}\StringTok{"ggplot2"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The task here is to load your Danish Monarchs csv into R using the
+\texttt{tidyverse} toolkit, calculate and explore the kings' duration of
+reign with pipes \texttt{\%\textgreater{}\%} in \texttt{dplyr} and plot
+it over time.
+
+\subsection{Load the kings}\label{load-the-kings}
+
+Make sure to first create an \texttt{.Rproj} workspace with a
+\texttt{data/} folder where you place either your own dataset or the
+provided \texttt{kings.csv} dataset.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Look at the dataset that are you loading and check what its columns
+  are separated by? (hint: open it in plain text editor to see)
+\end{enumerate}
+
+List what is the separator: commas (since it is a comma separated values
+file (csv-file))
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Create a \texttt{kings} object in R with the different functions below
+  and inspect the different outputs.
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{read.csv()}
+\item
+  \texttt{read\_csv()}
+\item
+  \texttt{read.csv2()}
+\item
+  \texttt{read\_csv2()}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# FILL IN THE CODE BELOW and review the outputs}
+
+\NormalTok{kings1 }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"data/kings data.csv"}\NormalTok{)}
+
+\NormalTok{kings2 }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"data/kings data.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 57 Columns: 11
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr (11): Name, House, Start_year, End_year, Birth_year, Death_year, Gender,...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{kings3 }\OtherTok{\textless{}{-}} \FunctionTok{read.csv2}\NormalTok{(}\StringTok{"data/kings data.csv"}\NormalTok{)}
+
+\NormalTok{kings4 }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv2}\NormalTok{( }\StringTok{"data/kings data.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## i Using "','" as decimal and "'.'" as grouping mark. Use `read_delim()` for more control.
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: One or more parsing issues, call `problems()` on your data frame for details,
+## e.g.:
+##   dat <- vroom(...)
+##   problems(dat)
+\end{verbatim}
+
+\begin{verbatim}
+## Rows: 57 Columns: 1
+## -- Column specification --------------------------------------------------------
+## Delimiter: ";"
+## chr (1): Name,House,Start_year,End_year,Birth_year,Death_year,Gender,Dynasty...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+Answer: 1. Which of these functions is a \texttt{tidyverse} function?
+Read data with it below into a \texttt{kings} object - ``\_'' and ``.''
+is a tidyverse function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{kings }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"data/kings data.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 57 Columns: 11
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr (11): Name, House, Start_year, End_year, Birth_year, Death_year, Gender,...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  What is the result of running \texttt{class()} on the \texttt{kings}
+  object created with a tidyverse function.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{class}\NormalTok{(kings)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "spec_tbl_df" "tbl_df"      "tbl"         "data.frame"
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  We see that ``class()'' informs us that the ``kings'' object is a
+  tabular data.frame.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  How many columns does the object have when created with these
+  different functions?
+\end{enumerate}
+
+\begin{itemize}
+\tightlist
+\item
+  It differs, when using a proper tidyverse function to load the csv,
+  the object has 11 columns. But when loading the csv improperly, it
+  only has 1 column.
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{3}
+\tightlist
+\item
+  Show the dataset so that we can see how R interprets each column
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{glimpse}\NormalTok{(kings)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 57
+## Columns: 11
+## $ Name       <chr> "Gorm den Gamle", "Harald 1. Blåtand", "Toke_Gormsen", "Sve~
+## $ House      <chr> "Gorm", "Gorm", "Gorm", "Gorm", "Gorm", "Gorm", "Gorm", "Fa~
+## $ Start_year <chr> "936", "NULL", "985", "NULL", "1014", "1018", "1035", "1042~
+## $ End_year   <chr> "958", "NULL", "986", "NULL", "1018", "1035", "1042", "1047~
+## $ Birth_year <chr> "908", "936", "NULL", "NULL", "963", "NULL", "995", "1018",~
+## $ Death_year <chr> "958", "985", "986", "1014", "NULL", "1035", "1042", "1047"~
+## $ Gender     <chr> "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M", "M",~
+## $ Dynasty    <chr> "Jellingdynastiet", "Jellingdynastiet", "Jellingdynastiet",~
+## $ Source     <chr> "https://da.wikipedia.org/wiki/Gorm_den_Gamle", "https://da~
+## $ BirthDMY   <chr> "908", "936", NA, "17/04/963", "994", "995", "1018", "1024"~
+## $ DeathDMY   <chr> "958", "987", NA, "03/02/1014", "1018", "12/11/1035", "08/0~
+\end{verbatim}
+
+We see that R interprets each column as ``characters'', that is, as
+letters, and not for instance as numbers or years.
+
+\subsection{Calculate the duration of reign for all the kings in your
+table}\label{calculate-the-duration-of-reign-for-all-the-kings-in-your-table}
+
+You can calculate the duration of reign in years with \texttt{mutate}
+function by subtracting the equivalents of your \texttt{startReign} from
+\texttt{endReign} columns and writing the result to a new column called
+\texttt{duration}. But first you need to check a few things:
+
+\begin{itemize}
+\tightlist
+\item
+  Is your data messy? Fix it before re-importing to R
+\item
+  Data is not messy, since it is Adelas :-) I will however change how
+  Rstudio interprets these columns, to be numeric.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{kings }\OtherTok{\textless{}{-}}\NormalTok{ kings }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{Name =} \FunctionTok{as.character}\NormalTok{(Name),}
+    \AttributeTok{House =} \FunctionTok{as.character}\NormalTok{(House),}
+    \AttributeTok{Start\_year =} \FunctionTok{as.numeric}\NormalTok{(Start\_year),}
+    \AttributeTok{End\_year =} \FunctionTok{as.numeric}\NormalTok{(End\_year),}
+    \AttributeTok{Birth\_year =} \FunctionTok{as.numeric}\NormalTok{(Birth\_year),}
+    \AttributeTok{Death\_year =} \FunctionTok{as.numeric}\NormalTok{(Death\_year),}
+    \AttributeTok{Gender =} \FunctionTok{as.character}\NormalTok{(Gender),       }
+    \AttributeTok{Dynasty =} \FunctionTok{as.character}\NormalTok{(Dynasty),}
+    \AttributeTok{Source =} \FunctionTok{as.character}\NormalTok{(Source),}
+    \AttributeTok{BirthDMY =} \FunctionTok{as.character}\NormalTok{(BirthDMY),   }
+    \AttributeTok{DeathDMY =} \FunctionTok{as.character}\NormalTok{(DeathDMY)}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}
+    \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(Start\_year),}
+    \SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(End\_year)}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: There were 4 warnings in `mutate()`.
+## The first warning was:
+## i In argument: `Start_year = as.numeric(Start_year)`.
+## Caused by warning:
+## ! NAs introduced by coercion
+## i Run `dplyr::last_dplyr_warnings()` to see the 3 remaining warnings.
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Do your start and end of reign columns contain NAs? Choose the right
+  strategy to deal with them: \texttt{na.omit()}, \texttt{na.rm=TRUE},
+  \texttt{!is.na()} Create a new column called \texttt{duration} in the
+  kings dataset, utilizing the \texttt{mutate()} function from
+  tidyverse. Check with your group to brainstorm the options.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{kings\_cleaned }\OtherTok{\textless{}{-}}\NormalTok{ kings }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{duration =}\NormalTok{ End\_year }\SpecialCharTok{{-}}\NormalTok{ Start\_year) }
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Calculate the average duration of reign for all
+rulers}\label{calculate-the-average-duration-of-reign-for-all-rulers}
+
+Do you remember how to calculate an average on a vector object? If not,
+review the last two lessons and remember that a column is basically a
+vector. So you need to subset your \texttt{kings} dataset to the
+\texttt{duration} column. If you subset it as a vector you can calculate
+average on it with \texttt{mean()} base-R function. If you subset it as
+a tibble, you can calculate average on it with \texttt{summarize()}
+tidyverse function. Try both ways!
+
+\begin{itemize}
+\tightlist
+\item
+  You first need to know how to select the relevant \texttt{duration}
+  column. What are your options?
+\item
+  Is your selected \texttt{duration} column a tibble or a vector? The
+  \texttt{mean()} function can only be run on a vector. The
+  \texttt{summarize()} function works on a tibble.
+\item
+  Are you getting an error that there are characters in your column?
+  Coerce your data to numbers with \texttt{as.numeric()}.
+\item
+  Remember to handle NAs: \texttt{mean(X,\ na.rm=TRUE)}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+
+\NormalTok{mean\_duration }\OtherTok{\textless{}{-}}\NormalTok{ kings\_cleaned }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarize}\NormalTok{(}\AttributeTok{avg\_duration =} \FunctionTok{mean}\NormalTok{(duration, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{))}
+
+\NormalTok{mean\_duration}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 1
+##   avg_duration
+##          <dbl>
+## 1         19.6
+\end{verbatim}
+
+\subsection{How many and which kings enjoyed a longer-than-average
+duration of
+reign?}\label{how-many-and-which-kings-enjoyed-a-longer-than-average-duration-of-reign}
+
+You have calculated the average duration above. Use it now to
+\texttt{filter()} the \texttt{duration} column in \texttt{kings}
+dataset. Display the result and also count the resulting rows with
+\texttt{count()}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{long\_reign\_kings }\OtherTok{\textless{}{-}}\NormalTok{ kings\_cleaned }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(duration }\SpecialCharTok{\textgreater{}}\NormalTok{ mean\_duration)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Using one column matrices in `filter()` was deprecated in dplyr 1.1.0.
+## i Please use one dimensional logical vectors instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(long\_reign\_kings)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 52 x 12
+##    Name    House Start_year End_year Birth_year Death_year Gender Dynasty Source
+##    <chr>   <chr>      <dbl>    <dbl>      <dbl>      <dbl> <chr>  <chr>   <chr> 
+##  1 Gorm d~ Gorm         936      958        908        958 M      Jellin~ https~
+##  2 Toke_G~ Gorm         985      986         NA        986 M      Jellin~ https~
+##  3 Harald~ Gorm        1014     1018        963         NA M      Jellin~ https~
+##  4 Knud 1~ Gorm        1018     1035         NA       1035 M      Jellin~ https~
+##  5 Hardek~ Gorm        1035     1042        995       1042 M      Jellin~ https~
+##  6 Magnus~ Fair~       1042     1047       1018       1047 M      Jellin~ https~
+##  7 Svend ~ Estr~       1047     1074       1024       1076 M      <NA>    https~
+##  8 Harald~ Estr~       1074     1080       1019       1080 M      Jellin~ https~
+##  9 Knud 2~ Estr~       1080     1086       1041       1086 M      Jellin~ https~
+## 10 Oluf 1~ Estr~       1086     1095       1043       1095 M      Jellin~ https~
+## # i 42 more rows
+## # i 3 more variables: BirthDMY <chr>, DeathDMY <chr>, duration <dbl>
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{long\_reign\_kings }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{count}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 1
+##       n
+##   <int>
+## 1    52
+\end{verbatim}
+
+We see here a list of 25 kings (and queens) who had longer than average
+duration of reign.
+
+\subsection{How many days did the three longest-ruling monarchs
+rule?}\label{how-many-days-did-the-three-longest-ruling-monarchs-rule}
+
+\begin{itemize}
+\tightlist
+\item
+  Sort kings by reign \texttt{duration} in the descending order. Select
+  the three longest-ruling monarchs with the \texttt{slice()} function
+\item
+  Use \texttt{mutate()} to create \texttt{Days} column where you
+  calculate the total number of days they ruled
+\item
+  BONUS: consider the transition year (with 366 days) in your
+  calculation!
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{kings\_cleaned }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(duration)) }\SpecialCharTok{\%\textgreater{}\%}    
+  \FunctionTok{slice}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{3}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}                 
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{Days =}\NormalTok{ duration }\SpecialCharTok{*} \FloatTok{365.25}\NormalTok{,}
+    \AttributeTok{Days =}\NormalTok{ Days}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select}\NormalTok{(Name, duration, Days)   }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 3 x 3
+##   Name               duration   Days
+##   <chr>                 <dbl>  <dbl>
+## 1 Christian 4.             60 21915 
+## 2 Margrete 2.              51 18628.
+## 3 Erik 7. af Pommern       43 15706.
+\end{verbatim}
+
+\subsection{Challenge: Plot the kings' duration of reign through
+time}\label{challenge-plot-the-kings-duration-of-reign-through-time}
+
+What is the long-term trend in the duration of reign among Danish
+monarchs? How does it relate to the historical violence trends ?
+
+\begin{itemize}
+\tightlist
+\item
+  Try to plot the duration of reign column in \texttt{ggplot} with
+  \texttt{geom\_point()} and \texttt{geom\_smooth()}
+\item
+  In order to peg the duration (which is between 1-99) somewhere to the
+  x axis with individual centuries, I recommend creating a new column
+  \texttt{midyear} by adding to \texttt{startYear} the product of
+  \texttt{endYear} minus the \texttt{startYear} divided by two
+  (\texttt{startYear\ +\ (endYear-startYear)/2}).
+\item
+  Now you can plot the kings dataset, plotting \texttt{midyear} along
+  the x axis and \texttt{duration} along y axis
+\item
+  BONUS: add a title, nice axis labels to the plot and make the theme
+  B\&W and font bigger to make it nice and legible!
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{kings\_cleaned }\OtherTok{\textless{}{-}}\NormalTok{ kings\_cleaned }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{midyear =}\NormalTok{ Start\_year }\SpecialCharTok{+}\NormalTok{ (End\_year }\SpecialCharTok{{-}}\NormalTok{ Start\_year) }\SpecialCharTok{/} \DecValTok{2}\NormalTok{)}
+
+\FunctionTok{ggplot}\NormalTok{(kings\_cleaned, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ midyear, }\AttributeTok{y =}\NormalTok{ duration)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{color =} \StringTok{"steelblue"}\NormalTok{, }\AttributeTok{size =} \DecValTok{2}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.7}\NormalTok{) }\SpecialCharTok{+}    
+  \FunctionTok{geom\_smooth}\NormalTok{(}\AttributeTok{method =} \StringTok{"loess"}\NormalTok{, }\AttributeTok{se =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{color =} \StringTok{"darkred"}\NormalTok{) }\SpecialCharTok{+} 
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Trend in Duration of Reign of Danish Monarchs Over Time"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Reign Midyear"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Duration of Reign (Years)"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_bw}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{)       }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `geom_smooth()` using formula = 'y ~ x'
+\end{verbatim}
+
+\includegraphics{DanishMonarchs_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+And to submit this rmarkdown, knit it into html. But first, clean up the
+code chunks, adjust the date, rename the author and change the
+\texttt{eval=FALSE} flag to \texttt{eval=TRUE} so your script actually
+generates an output. Well done!
+
+\end{document}
