@@ -1,0 +1,410 @@
+---
+title: "Final Project Report: WWII War Economies"
+author: "Christian Reinholdt"
+date: "26.5.2025"
+output: html_document
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Installing Packages if needed (change eval=TRUE)
+
+```{r installing packages, eval=FALSE}
+
+install.packages("rmarkdown")
+install.packages("tidyverse")
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("tidyr")
+install.packages("gganimate")
+install.packages("ggimage")
+install.packages("readr")
+install.packages("scales")
+install.packages("gifski")
+install.packages("av")
+
+```
+
+## Loading packages (if already installed)
+
+```{r loading packages}
+
+library("rmarkdown")
+library("tidyverse")
+library("ggplot2")
+library("dplyr")
+library("tidyr")
+library("gganimate")
+library("ggimage")
+library("readr")
+library("scales")
+library("gifski")
+library("av")
+
+```
+
+
+## Raw Material Production (figures 1 and 2)
+
+### 1: Loading the raw materials dataset of only major nations
+
+```{r loading raw material dataset}
+raw_materials_data <- read_csv("data/raw materials 1.1.csv")
+
+```
+
+### 1.1: Checking how Rstudio interprets the column types, changing them, and then checking again
+```{r raw material columns}
+str(raw_materials_data)
+
+```
+```{r specifying column types raw materials}
+raw_materials_data$year <- as.integer(raw_materials_data$year)
+raw_materials_data$country <- as.character(raw_materials_data$country)
+raw_materials_data$coal_produced <- as.numeric(raw_materials_data$coal_produced)
+raw_materials_data$iron_produced <- as.numeric(raw_materials_data$iron_produced)
+raw_materials_data$oil_produced <- as.numeric(raw_materials_data$oil_produced)
+
+str(raw_materials_data)
+```
+
+### 1.2: Calculating the mean annual coal production of the major nations (Germany, Italy, Japan, USA, UK, USSR)
+
+``` {r mean annual coal production}
+
+major_nations <- c("germany", "italy", "japan", "usa", "uk", "ussr")
+
+mean_coal_production <- raw_materials_data %>%
+  filter(country %in% major_nations) %>%
+  group_by(country) %>%
+  summarise(mean_annual_coal = mean(coal_produced, na.rm = TRUE))
+
+print(mean_coal_production)
+```
+
+
+### 1.3: Visualising only Coal Production of the Major Nations (visual not used in report)
+
+```{r visual coal 1}
+
+ggplot(mean_coal_production, aes(x = country, y = mean_annual_coal, fill = country)) +
+  geom_col() +
+  scale_fill_manual(
+    values = c("germany" = "grey",
+               "japan" = "yellow",
+               "italy" = "green",
+               "usa" = "blue",
+               "uk" = "pink",
+               "ussr" = "red")
+  ) +
+  scale_y_continuous(labels = comma_format()) +  # No scientific notation
+  labs(
+    title = "Wartime Coal Production of Major Nations",
+    x = "Nation",
+    y = "Mean Annual Coal Production (Millions of Tonnes)"
+  ) +
+  theme_minimal()
+
+```
+
+
+### 1.4: Visualising each category of raw materials in one visual (figure 1)
+
+``` {r raw mateirals of major nations}
+
+# Filter and reshape the data to long format
+production_long <- raw_materials_data %>%
+  filter(country %in% major_nations) %>%
+  select(country, coal_produced, iron_produced, oil_produced) %>%
+  pivot_longer(
+    cols = c(coal_produced, iron_produced, oil_produced),
+    names_to = "material",
+    values_to = "amount"
+  )
+
+# Calculate mean annual production per country and material
+mean_production <- production_long %>%
+  group_by(country, material) %>%
+  summarise(mean_annual = mean(amount, na.rm = TRUE), .groups = "drop") %>%
+  mutate(mean_annual = mean_annual / 1)  # Convert to millions for better scale
+
+
+ggplot(mean_production, aes(x = country, y = mean_annual, fill = material)) +
+  geom_col(position = "dodge") +
+  geom_text(
+  aes(label = comma(mean_annual)),
+  position = position_dodge(width = 0.9),
+  vjust = -0.3,
+  size = 3
+) +
+  scale_y_continuous(trans = "sqrt", labels = comma_format()) +
+  scale_fill_manual(
+    values = c("coal_produced" = "grey",
+               "iron_produced" = "steelblue",
+               "oil_produced" = "black"),
+    labels = c("Coal", "Iron", "Oil")
+  ) +
+  labs(
+    title = "Mean Annual Production of Coal, Iron, and Oil by Major Nations",
+    x = "Nation",
+    y = "Mean Annual Production (in thousand tons)",
+    fill = "Material"
+  ) +
+  theme_minimal()
+
+```
+
+
+Note that there was no data available in the source on USSR iron production, which is therefore absent in this data set.
+
+### 1.5: Mean Annual Production of Coal, Iron, and Oil by Major Nations + important Allies/Occupied territories
+
+
+### Loading data set with production of important allies/occupied areas
+
+```{r loading allies data set}
+
+data_raw_materials_with_allies <- read_csv("data/raw materials w allies 2.1.csv")
+
+
+
+```
+
+```{r raw materials allies data columns}
+str(data_raw_materials_with_allies)
+
+```
+
+```{r specifying column types raw materials w allies data}
+data_raw_materials_with_allies$year <- as.integer(data_raw_materials_with_allies$year)
+data_raw_materials_with_allies$country <- as.character(data_raw_materials_with_allies$country)
+data_raw_materials_with_allies$coal_produced <- as.numeric(data_raw_materials_with_allies$coal_produced)
+data_raw_materials_with_allies$iron_produced <- as.numeric(data_raw_materials_with_allies$iron_produced)
+data_raw_materials_with_allies$oil_produced <- as.numeric(data_raw_materials_with_allies$oil_produced)
+
+str(data_raw_materials_with_allies)
+
+```
+### 1.6: Mean Annual Production of Raw Materials by Major Nations in WWII, including Axis allies and Occupied Areas (figure 2)
+
+```{r raw materials with allies mean annual visual}
+
+# Create a custom names for countries
+country_groups <- c(
+  gerausrom = "Germany, Austria, Romania",
+  japkrmanchu = "Japan, Korea, Manchuria",
+  usa = "USA",
+  uk = "UK",
+  ussr = "USSR",
+  italy = "Italy"
+)
+
+# Filter only countries in the grouping
+grouped_data <- data_raw_materials_with_allies %>%
+  filter(country %in% names(country_groups)) %>%
+  mutate(group = country_groups[country])
+
+# Convert to long format and summarise mean production
+grouped_long <- grouped_data %>%
+  select(group, coal_produced, iron_produced, oil_produced) %>%
+  pivot_longer(
+    cols = c(coal_produced, iron_produced, oil_produced),
+    names_to = "material",
+    values_to = "amount"
+  ) %>%
+  filter(!is.na(amount)) %>%  # 🔧 Drop rows with NA production values
+  group_by(group, material) %>%
+  summarise(mean_annual = mean(amount), .groups = "drop")  # No need for na.rm anymore
+
+# Plot
+ggplot(grouped_long, aes(x = group, y = mean_annual, fill = material)) +
+  geom_col(position = "dodge") +
+  geom_text(
+    aes(label = comma(mean_annual)),
+    position = position_dodge(width = 0.9),
+    vjust = -0.3,
+    size = 3
+  ) +
+  scale_y_continuous(trans = "sqrt", labels = comma_format()) +
+  scale_fill_manual(
+    values = c("coal_produced" = "grey",
+               "iron_produced" = "steelblue",
+               "oil_produced" = "black"),
+    labels = c("Coal", "Iron", "Oil")
+  ) +
+  labs(
+    title = "Raw Materials by Major Nations + Important Allies/Occupied Areas",
+    x = "Nation (+ Close Allies/Occupied Areas)",
+    y = "Mean Annual Production (in thousand tons)",
+    fill = "Material"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+
+
+## 2: Production of war material of Major Nations (figures 3 and 4)
+
+### 2.1: Tank Production
+
+#### Loading the data set for tank production
+```{r tank production data}
+
+tank_data <- read_csv("data/Tank Production Sheet 1.0.csv")
+
+
+
+```
+
+```{r tank data columns}
+str(tank_data)
+
+```
+
+```{r specifying column types tank data}
+tank_data$year <- as.integer(tank_data$year)
+tank_data$country <- as.character(tank_data$country)
+tank_data$tanks_produced <- as.numeric(tank_data$tanks_produced)
+
+str(tank_data)
+
+```
+### 2.2: Comparing tank production of Major Nations (figure 3)
+
+```{r comparing tank production visual}
+
+tank_summary <- tank_data %>%
+  filter(!is.na(tanks_produced)) %>%
+  mutate(year = as.factor(year)) %>%
+  group_by(country, year) %>%
+  summarise(total_tanks = sum(tanks_produced, na.rm = TRUE), .groups = "drop")
+
+tank_summary <- tank_summary %>%
+  group_by(country) %>%
+  mutate(total_all_years = sum(total_tanks)) %>%
+  ungroup() %>%
+  mutate(country = reorder(country, -total_all_years))
+
+year_colors <- c(
+  "1939" = "grey",
+  "1940" = "darkgrey",
+  "1941" = "lightgrey",
+  "1942" = "darkred",
+  "1943" = "steelblue",
+  "1944" = "lightblue",
+  "1945" = "pink"
+)
+total_per_country <- tank_summary %>%
+  group_by(country) %>%
+  summarise(total_all_years = sum(total_tanks), .groups = "drop") %>%
+  mutate(country = factor(country, levels = levels(tank_summary$country)))
+
+ggplot(tank_summary, aes(x = country, y = total_tanks, fill = year)) +
+  geom_col() +
+  geom_text(aes(label = comma(total_tanks)),
+            position = position_stack(vjust = 0.5),
+            size = 2.5, color = "black") +
+  geom_text(
+    data = total_per_country,
+    aes(x = country, y = total_all_years, label = comma(total_all_years)),
+    vjust = -0.5, size = 4, fontface = "bold",
+    inherit.aes = FALSE
+  ) +
+  scale_fill_manual(values = year_colors) + 
+  scale_y_continuous(labels = comma_format()) +
+  labs(
+    title = "Tank Production by Country and Year",
+    x = "Nation (note missing data for Germany/Britain in 1945)",
+    y = "Tank Production of 1939-45",
+    fill = "Year"
+  ) +
+  theme_minimal()
+
+```
+
+I've put the first war years in similar grey colours, so that the relatively small production of these years may be viewed in contrast to the much bigger production of the later war years.
+
+## 2.3: Production of Military Aircraft of the Major Nations (figure 4)
+
+```{r importing aircraft data}
+
+aircraft_data <- read_csv("data/Aircraft Production Sheet 1.0.csv")
+str(aircraft_data)
+```
+
+```{r specifying column types aircraft data}
+aircraft_data$year <- as.integer(aircraft_data$year)
+aircraft_data$country <- as.character(aircraft_data$country)
+aircraft_data$aircraft_produced <- as.numeric(aircraft_data$aircraft_produced)
+
+str(aircraft_data)
+
+```
+### Military Aircraft Production by Country and Year (Figure 4)
+
+```{r comparing aircraft production visual}
+
+aircraft_summary <- aircraft_data %>%
+  filter(!is.na(aircraft_produced)) %>%
+  mutate(year = as.factor(year)) %>%
+  group_by(country, year) %>%
+  summarise(total_aircraft = sum(aircraft_produced, na.rm = TRUE), .groups = "drop")
+
+aircraft_summary <- aircraft_summary %>%
+  group_by(country) %>%
+  mutate(total_all_years = sum(total_aircraft)) %>%
+  ungroup() %>%
+  mutate(country = reorder(country, -total_all_years))
+
+year_colors <- c(
+  "1939" = "grey",
+  "1940" = "darkgrey",
+  "1941" = "lightgrey",
+  "1942" = "darkred",
+  "1943" = "steelblue",
+  "1944" = "lightblue",
+  "1945" = "pink"
+)
+total_per_country <- aircraft_summary %>%
+  group_by(country) %>%
+  summarise(total_all_years = sum(total_aircraft), .groups = "drop") %>%
+  mutate(country = factor(country, levels = levels(aircraft_summary$country)))
+
+ggplot(aircraft_summary, aes(x = country, y = total_aircraft, fill = year)) +
+  geom_col() +
+  geom_text(aes(label = comma(total_aircraft)),
+            position = position_stack(vjust = 0.5),
+            size = 2.5, color = "black") +
+  geom_text(
+    data = total_per_country,
+    aes(x = country, y = total_all_years, label = comma(total_all_years)),
+    vjust = -0.5, size = 4, fontface = "bold",
+    inherit.aes = FALSE
+  ) +
+  scale_fill_manual(values = year_colors) + 
+  scale_y_continuous(labels = comma_format()) +
+  labs(
+    title = "Aircraft Production by Country and Year",
+    x = "Nation",
+    y = "Aircraft Production of 1939-45",
+    fill = "Year"
+  ) +
+  theme_minimal()
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
